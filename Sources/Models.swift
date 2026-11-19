@@ -470,11 +470,11 @@ extension KeyedDecodingContainer {
 extension Double {
     var money: String { formatted(.currency(code: "USD")) }
 
-    /// "$15" or "$12.95"
+    /// "$15", "$1,240" or "$12.95"
     var shortMoney: String {
         let r = (self * 100).rounded() / 100
         if abs(r - r.rounded()) < 0.005 { return "$" + Int(r.rounded()).formatted() }
-        return String(format: "$%.2f", r)
+        return r.formatted(.currency(code: "USD"))
     }
 
     var clean: String {

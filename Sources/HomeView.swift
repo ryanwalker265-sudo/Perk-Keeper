@@ -201,7 +201,7 @@ private struct EnrollCard: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(list.count == 1 ? "1 credit needs enrolling" : "\(list.count) credits need enrolling")
                     .font(.subheadline.weight(.semibold))
-                Text(list.prefix(4).map(\.name).joined(separator: ", ") + (list.count > 4 ? "…" : ""))
+                Text(names(list).prefix(4).joined(separator: ", ") + (list.count > 4 ? "…" : ""))
                     .font(.caption).foregroundStyle(.secondary)
                 Text("Enroll in your bank's app, then mark it enrolled on the credit.")
                     .font(.caption2).foregroundStyle(.tertiary)
@@ -210,6 +210,13 @@ private struct EnrollCard: View {
         }
         .padding(14)
         .glassCard(tint: Theme.warn)
+    }
+
+    /// "Resy (Platinum Card)" when two cards have a credit with the same name.
+    private func names(_ list: [Credit]) -> [String] {
+        list.map { c in
+            list.filter({ $0.name == c.name }).count > 1 ? "\(c.name) (\(store.card(c.cardID)?.name ?? ""))" : c.name
+        }
     }
 }
 

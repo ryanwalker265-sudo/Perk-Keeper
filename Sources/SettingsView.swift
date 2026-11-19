@@ -13,7 +13,7 @@ struct SettingsView: View {
     @AppStorage("notify.syncEvery") private var syncEvery = 3
     @AppStorage("notify.syncHour") private var syncHour = 19
     @AppStorage("notify.fees") private var feeReminders = true
-    @AppStorage("sync.autoAdd") private var autoAdd = false
+    @AppStorage("sync.autoAdd") private var autoAdd = true
     @AppStorage("sync.careful") private var careful = false
     @AppStorage("sync.skip") private var skipWords = ""
     @AppStorage("amexTermsAcknowledged") private var amexAcknowledged = false

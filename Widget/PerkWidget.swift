@@ -149,7 +149,7 @@ struct PerkWidgetView: View {
 
 private extension Double {
     var widgetMoney: String {
-        abs(self - rounded()) < 0.005 ? "$" + Int(rounded()).formatted() : String(format: "$%.2f", self)
+        abs(self - rounded()) < 0.005 ? "$" + Int(rounded()).formatted() : formatted(.currency(code: "USD"))
     }
 }
 

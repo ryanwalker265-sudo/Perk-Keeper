@@ -17,7 +17,7 @@ enum Prefs {
     static var syncHour: Int { d.object(forKey: "notify.syncHour") as? Int ?? 19 }
     static var feeReminders: Bool { d.object(forKey: "notify.fees") as? Bool ?? true }
 
-    static var autoAdd: Bool { d.object(forKey: "sync.autoAdd") as? Bool ?? false }
+    static var autoAdd: Bool { d.object(forKey: "sync.autoAdd") as? Bool ?? true }
     /// Issuers the user has turned auto-add off for.
     static var autoAddOff: Set<String> { Set(d.stringArray(forKey: "sync.autoAddOff") ?? []) }
     static func autoAdd(for issuer: Issuer) -> Bool {

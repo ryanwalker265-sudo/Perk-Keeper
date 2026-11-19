@@ -321,7 +321,7 @@ struct SyncPanel: View {
         case .adding:
             return "One at a time, like tapping each Add button yourself."
         case .finished:
-            return "\(controller.totalNew) new since last time. Your offers list is up to date."
+            return controller.totalNew > 0 ? "Found \(controller.totalNew) new offers. Your offers list is up to date." : "Nothing new since your last sync."
         default:
             return nil
         }
