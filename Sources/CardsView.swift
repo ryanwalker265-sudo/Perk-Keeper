@@ -355,6 +355,14 @@ struct CardSetupView: View {
                       last4: last4, anniversaryMonth: knowsMonth ? month : nil, annualFee: Double(fee),
                       colors: colors, keepCredits: template == nil ? nil : keep)
         Haptics.success()
+        // Turn reminders on the first time someone adds a card (iOS asks for permission once).
+        if UserDefaults.standard.object(forKey: "notify.on") == nil {
+            Task {
+                let ok = await Notifier.shared.requestPermission()
+                Prefs.notificationsOn = ok
+                await Notifier.shared.reschedule(store: store)
+            }
+        }
         onDone()
     }
 }

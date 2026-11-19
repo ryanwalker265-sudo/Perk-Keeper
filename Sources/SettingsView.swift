@@ -252,6 +252,12 @@ struct SettingsView: View {
             if store.cards.isEmpty {
                 Button { store.replaceAll(with: DemoData.make()) } label: { Label("Load sample data", systemImage: "wand.and.stars") }
             }
+            HStack {
+                Label("Home Screen widget", systemImage: "square.text.square")
+                Spacer()
+                Text(AppGroup.containerURL != nil ? "Ready" : "Needs App Groups")
+                    .font(.caption).foregroundStyle(AppGroup.containerURL != nil ? Theme.good : Theme.warn)
+            }
             Button(role: .destructive) { confirmWipe = true } label: { Label("Delete all data", systemImage: "trash") }
         } header: {
             Text("Your data")

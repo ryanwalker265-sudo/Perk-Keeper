@@ -98,14 +98,19 @@ struct ProgressBar: View {
     var height: CGFloat = 6
 
     var body: some View {
-        GeometryReader { g in
-            ZStack(alignment: .leading) {
-                Capsule().fill(.primary.opacity(0.08))
-                Capsule().fill(color.gradient).frame(width: max(height, g.size.width * min(max(value, 0), 1)))
-                    .opacity(value > 0 ? 1 : 0)
+        let v = value.isFinite ? min(max(value, 0), 1) : 0
+        Capsule()
+            .fill(.primary.opacity(0.08))
+            .overlay(alignment: .leading) {
+                Rectangle()
+                    .fill(color.gradient)
+                    .scaleEffect(x: max(v, 0.0001), y: 1, anchor: .leading)
+                    .opacity(v > 0 ? 1 : 0)
             }
-        }
-        .frame(height: height)
+            .clipShape(Capsule())
+            .frame(height: height)
+            .accessibilityElement()
+            .accessibilityValue("\(Int(v * 100)) percent")
     }
 }
 
