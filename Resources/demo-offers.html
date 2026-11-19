@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practice Bank · Offers</title>
+<style>
+  :root { --ink: #1c2430; --muted: #687385; --line: #e6e9ee; --brand: #2f5d8a; --bg: #f5f7fa; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.4 -apple-system, system-ui, sans-serif; color: var(--ink); background: var(--bg); }
+  header { background: var(--brand); color: #fff; padding: 14px 16px 18px; }
+  header .bank { font-weight: 700; letter-spacing: .3px; }
+  header .card { opacity: .85; font-size: 13px; margin-top: 2px; }
+  .note { margin: 12px 16px 0; padding: 10px 12px; background: #fff7e0; border: 1px solid #f1dfa6; border-radius: 10px; font-size: 13px; color: #6b5a1e; }
+  h1 { font-size: 20px; margin: 16px 16px 8px; }
+  ul { list-style: none; margin: 0; padding: 0 12px; }
+  li { background: #fff; border: 1px solid var(--line); border-radius: 14px; margin: 10px 0; }
+  .tile { display: flex; gap: 12px; padding: 14px; align-items: center; }
+  .logo { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; color: #fff; flex: none; }
+  .body { flex: 1; min-width: 0; }
+  .body h3 { margin: 0 0 3px; font-size: 16px; }
+  .body p { margin: 0 0 4px; font-size: 13px; color: var(--ink); }
+  .exp { font-size: 12px; color: var(--muted); }
+  button.add { border: 1.5px solid var(--brand); color: var(--brand); background: #fff; border-radius: 18px; padding: 7px 12px; font-weight: 600; font-size: 13px; }
+  .added { color: #1d7a52; font-weight: 600; font-size: 13px; }
+  #more { display: block; margin: 8px auto 30px; border: 0; background: none; color: var(--brand); font-weight: 600; font-size: 15px; }
+  nav { display: flex; gap: 8px; padding: 0 16px; }
+  nav button { border: 1px solid var(--line); background: #fff; border-radius: 16px; padding: 6px 10px; font-size: 13px; }
+</style></head>
+<body>
+<header><div class="bank">PRACTICE BANK</div><div class="card">Practice Rewards Card (-10001)</div></header>
+<div class="note">This page is part of Perk Keeper. It shows how syncing works. Nothing here is a real offer or touches a real account.</div>
+<nav><button id="pay">Make a payment</button><button id="transfer">Transfer</button></nav>
+<h1>Offers for you</h1>
+<ul id="list"></ul>
+<button id="more">Load more</button>
+<script>
+  var COLORS = ['#e4572e', '#29335c', '#f3a712', '#669bbc', '#2a9d8f', '#8d5a97', '#c1121f', '#386641', '#6d597a', '#bc6c25'];
+  var OFFERS = [
+    ['Riverbend Hotels', 'Spend $250 or more, earn $50 back. Up to 2 times (total of $100).', 40],
+    ['Northwind Electronics', 'Earn 10% back on purchases, up to a total of $40', 55],
+    ['Quickcart Grocery', 'Get $5 back on a single purchase of $25+', 3],
+    ['Maple Home Supply', 'Spend $100+, earn $20 back', 28],
+    ['Bluebird Coffee', 'Earn +2 points per dollar, up to 1,000 pts', 60],
+    ['Streamly', 'Spend $10.99 or more, earn $10.99 back', 31],
+    ['Harbor Pharmacy', 'Spend $20 or more, earn $5 back', 19],
+    ['ParcelPost Shipping', 'Spend $30+, earn $10 back', 12],
+    ['Fresh Basket Meals', 'Earn 20% back up to $15', 8]
+  ];
+  var ADDED = [['Summit Outfitters', 'Spend $75 or more, earn $15 back', 22]];
+  function fmt(days) { var d = new Date(); d.setDate(d.getDate() + days); return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear(); }
+  var shown = 0;
+  function tile(o, i, added) {
+    var li = document.createElement('li');
+    li.innerHTML = '<div class="tile" data-testid="offerTile"><div class="logo" style="background:' + COLORS[i % COLORS.length] + '">' + o[0][0] + '</div>' +
+      '<div class="body"><h3>' + o[0] + '</h3><p>' + o[1] + '</p><span class="exp">Expires ' + fmt(o[2]) + '</span></div>' +
+      (added ? '<span class="added">Added to Card</span>' : '<button class="add" data-testid="merchantOfferListAddButton">Add to Card</button>') + '</div>';
+    var b = li.querySelector('button.add');
+    if (b) b.addEventListener('click', function () {
+      b.disabled = true; b.textContent = '…';
+      setTimeout(function () { var s = document.createElement('span'); s.className = 'added'; s.textContent = 'Added to Card'; b.replaceWith(s); }, 350);
+    });
+    return li;
+  }
+  function render(n) {
+    var list = document.getElementById('list');
+    for (var i = 0; i < n && shown < OFFERS.length; i++, shown++) list.appendChild(tile(OFFERS[shown], shown, false));
+    if (shown >= OFFERS.length) document.getElementById('more').remove();
+  }
+  document.getElementById('more').addEventListener('click', function () { setTimeout(function () { render(3); }, 400); });
+  ['pay', 'transfer'].forEach(function (id) { document.getElementById(id).addEventListener('click', function () { alert('Practice page: no payments here.'); }); });
+  setTimeout(function () {
+    ADDED.forEach(function (o, i) { document.getElementById('list').appendChild(tile(o, 9 + i, true)); });
+    render(6);
+  }, 500);
+</script>
+</body></html>

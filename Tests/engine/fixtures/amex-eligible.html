@@ -1,0 +1,78 @@
+<!doctype html>
+<html><head><meta name="viewport" content="width=device-width"><title>Amex Offers</title>
+<style>
+  body { font-family: -apple-system, sans-serif; margin: 0; }
+  header { padding: 12px; background: #006fcf; color: #fff; }
+  nav button { margin: 4px; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  li { border-bottom: 1px solid #ddd; }
+  .tile { display: flex; gap: 10px; padding: 14px; align-items: center; min-height: 90px; }
+  .tile img { width: 44px; height: 44px; background: #eee; }
+  .body { flex: 1; }
+  .body h3 { margin: 0 0 4px; font-size: 16px; }
+  .body p { margin: 0 0 4px; font-size: 13px; }
+  .exp { font-size: 12px; color: #666; }
+  .icon-btn { width: 36px; height: 36px; border-radius: 18px; border: 1px solid #006fcf; background: #fff; }
+  .chat { position: fixed; bottom: 10px; right: 10px; width: 44px; height: 44px; }
+  #loadmore { margin: 16px; }
+</style></head>
+<body>
+<header>
+  <div>Platinum Card&reg; (-41009)</div>
+  <nav>
+    <button id="pay">Make a payment</button>
+    <button id="transfer">Transfer</button>
+    <button id="addacct">Add account</button>
+    <a href="/offers/enrolled" id="tab-added">Added to Card</a>
+  </nav>
+</header>
+<h1>Offers for you</h1>
+<ul id="list"></ul>
+<button id="loadmore">Load more</button>
+<button class="chat" aria-label=""><svg width="20" height="20"><circle cx="10" cy="10" r="8"/></svg></button>
+<script>
+  window.__clicks = [];
+  window.__forbidden = 0;
+  ['pay', 'transfer', 'addacct'].forEach(function (id) { document.getElementById(id).addEventListener('click', function () { window.__forbidden++; }); });
+  document.querySelector('.chat').addEventListener('click', function () { window.__forbidden++; });
+
+  var OFFERS = [
+    ['Hilton', 'Spend $250 or more, earn $50 back. Up to 2 times (total of $100).', 'Expires 12/31/2026', 'testid'],
+    ['Dell Technologies', 'Earn 10% back on purchases, up to a total of $40', 'Expires 01/15/2027', 'testid'],
+    ['Uber Eats', 'Get $5 back on a single purchase of $25+', 'Expires in 3 days', 'icon'],
+    ['Lowe’s', 'Spend $100+, earn $20 back', 'Expires Dec 20, 2026', 'testid'],
+    ['Starbucks', 'Earn +2 Membership Rewards® points per dollar, up to 1,000 pts', 'Expires 2/1/27', 'aria'],
+    ['Disney+', 'Spend $10.99 or more, earn $10.99 back', 'Expires 12/31/2026', 'testid'],
+    ['Walgreens', 'Spend $20 or more, earn $5 back', 'Expires 01/31/2027', 'testid'],
+    ['FedEx', 'Spend $30+, earn $10 back', 'Expires 12/10/2026', 'testid'],
+    ['Instacart', 'Earn 20% back up to $15', 'Expires 12/24/2026', 'icon']
+  ];
+  var shown = 0;
+  function tile(o) {
+    var li = document.createElement('li');
+    var html = '<div class="tile" data-testid="offerTile"><img alt="' + o[0] + ' logo"><div class="body"><h3>' + o[0] + '</h3><p>' + o[1] + '</p><span class="exp">' + o[2] + '</span></div>';
+    if (o[3] === 'testid') html += '<button data-testid="merchantOfferListAddButton">Add to Card</button>';
+    else if (o[3] === 'aria') html += '<button class="icon-btn" aria-label="Add Starbucks offer to card"><svg width="16" height="16"><path d="M8 2v12M2 8h12"/></svg></button>';
+    else html += '<button class="icon-btn"><svg width="16" height="16"><path d="M8 2v12"/><path d="M2 8h12"/></svg></button>';
+    html += '</div>';
+    li.innerHTML = html;
+    var btn = li.querySelector('button');
+    btn.addEventListener('click', function () {
+      window.__clicks.push(o[0]);
+      setTimeout(function () {
+        var span = document.createElement('span');
+        span.textContent = 'Added to Card';
+        btn.replaceWith(span);
+      }, 200);
+    });
+    return li;
+  }
+  function render(n) {
+    var list = document.getElementById('list');
+    for (var i = 0; i < n && shown < OFFERS.length; i++) list.appendChild(tile(OFFERS[shown++]));
+    if (shown >= OFFERS.length) document.getElementById('loadmore').remove();
+  }
+  document.getElementById('loadmore').addEventListener('click', function () { setTimeout(function () { render(3); }, 300); });
+  render(4);
+</script>
+</body></html>

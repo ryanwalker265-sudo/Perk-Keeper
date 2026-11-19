@@ -1,0 +1,9 @@
+build/
+Payload/
+*.ipa
+PerkKeeper.xcodeproj/
+Support/
+.DS_Store
+node_modules/
+Tests/engine/node_modules/
+screenshots/

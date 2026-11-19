@@ -1,0 +1,78 @@
+<!doctype html>
+<html><head><meta name="viewport" content="width=device-width"><title>Chase Offers</title>
+<style>
+  body { font-family: -apple-system, sans-serif; margin: 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; }
+  [data-cy="commerce-tile"] { border: 1px solid #ccc; border-radius: 8px; padding: 10px; min-height: 120px; cursor: pointer; }
+  mds-icon { display: inline-block; width: 24px; height: 24px; }
+  .chip { display: inline-block; padding: 6px 10px; border: 1px solid #117aca; border-radius: 16px; margin: 4px; }
+</style></head>
+<body>
+<header><span>CHASE SAPPHIRE RESERVE (...4422)</span> <button id="pay">Pay card</button></header>
+<div id="app"></div>
+<script>
+  window.__clicks = [];
+  window.__forbidden = 0;
+  document.getElementById('pay').addEventListener('click', function () { window.__forbidden++; });
+
+  // Tiny stand-ins for Chase's design-system web components.
+  customElements.define('mds-icon', class extends HTMLElement {
+    connectedCallback() {
+      if (this.shadowRoot) return;
+      var r = this.attachShadow({ mode: 'open' });
+      r.innerHTML = '<svg width="24" height="24"><circle cx="12" cy="12" r="10"/></svg>';
+    }
+  });
+  customElements.define('mds-button', class extends HTMLElement {
+    connectedCallback() {
+      if (this.shadowRoot) return;
+      var r = this.attachShadow({ mode: 'open' });
+      r.innerHTML = '<button id="back-button">Back</button>';
+      r.getElementById('back-button').addEventListener('click', function () { history.back(); });
+    }
+  });
+
+  var OFFERS = [
+    { id: 'sb', m: 'Starbucks', r: '5% cash back', d: '12 days left', added: false },
+    { id: 'wf', m: 'Wayfair', r: '10% cash back', d: '30 days left', added: false },
+    { id: 'ls', m: 'Lyft', r: '$10 cash back', d: '5 days left', added: true },
+    { id: 'hd', m: 'Home Depot', r: '3% cash back', d: '21 days left', added: false },
+    { id: 'pl', m: 'Peloton', r: '$50 cash back', d: '9 days left', added: true }
+  ];
+
+  function hub() {
+    var app = document.getElementById('app');
+    var html = '<div><span class="chip" role="button" tabindex="0">All offers</span><span class="chip" role="button" tabindex="0">Dining</span></div><div class="grid">';
+    OFFERS.forEach(function (o) {
+      html += '<div data-cy="commerce-tile" role="button" tabindex="0" data-id="' + o.id + '">' +
+        '<div><img alt="' + o.m + '" width="40" height="40"></div>' +
+        '<div><div class="merchant">' + o.m + '</div><div>' + o.r + '</div><div>' + o.d + '</div>' +
+        '<mds-icon type="' + (o.added ? 'ico_checkmark_filled' : 'ico_add_circle') + '"></mds-icon></div></div>';
+    });
+    html += '</div>';
+    app.innerHTML = html;
+    app.querySelectorAll('[data-cy="commerce-tile"]').forEach(function (t) {
+      t.addEventListener('click', function () {
+        var o = OFFERS.filter(function (x) { return x.id === t.getAttribute('data-id'); })[0];
+        window.__clicks.push(o.m);
+        o.added = true;
+        location.hash = '#/dashboard/merchantOffers/offer-details?offerId=' + o.id;
+      });
+    });
+  }
+  function details() {
+    var id = (location.hash.match(/offerId=(\w+)/) || [])[1];
+    var o = OFFERS.filter(function (x) { return x.id === id; })[0];
+    document.getElementById('app').innerHTML = '<mds-button variant="back"></mds-button><h2>' + o.m + '</h2><p>Offer added to card. ' + o.r + '. ' + o.d + '</p>';
+  }
+  function route() {
+    // Render after a short delay, like a real single-page app.
+    setTimeout(function () {
+      if (location.hash.indexOf('offer-details') >= 0) details(); else hub();
+    }, 150);
+  }
+  window.addEventListener('hashchange', route);
+  if (!location.hash) history.replaceState(null, '', '#/dashboard/merchantOffers/offer-hub?accountId=1');
+  route();
+</script>
+</body></html>

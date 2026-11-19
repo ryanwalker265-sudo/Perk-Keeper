@@ -1,0 +1,27 @@
+<!doctype html>
+<html><head><meta name="viewport" content="width=device-width"><title>Cash-back deals</title>
+<style>
+  body { font-family: -apple-system, sans-serif; }
+  .deal { border: 1px solid #ccc; margin: 8px; padding: 10px; }
+</style></head>
+<body>
+<h1>Cash-back deals</h1>
+<div><span>Card ending in 7731</span> <button id="pay">Make a payment</button> <button id="lock">Lock card</button></div>
+<div id="deals">
+  <div class="deal"><strong>Shell</strong><div>Get 5% cash back</div><div>Expires in 5 days</div><button class="act">Activate</button></div>
+  <div class="deal"><strong>Chipotle</strong><div>$3 cash back on $15+</div><div>Expires 12/28/2026</div><button class="act">Activate</button></div>
+  <div class="deal"><strong>Spotify</strong><div>Save 15% on Premium</div><div>Valid through 01/10/2027</div><span>Activated</span></div>
+</div>
+<div class="promo"><p>Balance transfer: 0% intro APR ends 06/30/2027</p><button id="bt">Apply now</button></div>
+<script>
+  window.__clicks = [];
+  window.__forbidden = 0;
+  ['pay', 'lock', 'bt'].forEach(function (id) { document.getElementById(id).addEventListener('click', function () { window.__forbidden++; }); });
+  document.querySelectorAll('.act').forEach(function (b) {
+    b.addEventListener('click', function () {
+      window.__clicks.push(b.parentElement.querySelector('strong').textContent);
+      b.textContent = 'Activated';
+    });
+  });
+</script>
+</body></html>

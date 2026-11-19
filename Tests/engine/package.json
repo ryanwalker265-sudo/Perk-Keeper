@@ -1,0 +1,7 @@
+{
+  "name": "perk-keeper-engine-tests",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node run.mjs all" },
+  "devDependencies": { "playwright": "^1.49.0" }
+}

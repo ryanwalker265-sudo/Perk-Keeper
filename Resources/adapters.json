@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "updated": "2026-11-19",
+  "notes": "Data only: page addresses, CSS selectors and text patterns the offer engine uses on each bank's site. The app downloads newer versions of this file from the repo, so selectors can be fixed without a new build.",
+  "adapters": [
+    {
+      "issuer": "amex",
+      "name": "American Express",
+      "domains": ["americanexpress.com"],
+      "steps": [
+        { "id": "available", "label": "Available offers", "url": "https://global.americanexpress.com/offers/eligible" },
+        { "id": "added", "label": "Added to card", "url": "https://global.americanexpress.com/offers/enrolled" }
+      ],
+      "pageStatus": [
+        { "match": "/offers/enrolled", "status": "added" },
+        { "match": "/offers/eligible", "status": "available" }
+      ],
+      "addSelectors": [
+        "button[data-testid=\"merchantOfferListAddButton\"]",
+        "button[data-test-id=\"merchantOfferListAddButton\"]",
+        "button[data-testid*=\"offerAddButton\" i]",
+        "button[data-testid*=\"addOffer\" i]",
+        ".offer-cta",
+        "button[title=\"Add to Card\" i]",
+        "button[aria-label*=\"add to card\" i]"
+      ],
+      "addedSelectors": [
+        "[data-testid*=\"addedToCard\" i]",
+        "[data-testid*=\"enrolled\" i]"
+      ],
+      "tileSelectors": [
+        "[data-testid*=\"offerTile\" i]",
+        "[data-testid*=\"merchantOfferList\" i][data-testid*=\"item\" i]"
+      ],
+      "merchantSelectors": ["h2", "h3", "h4", "[data-testid*=\"merchant\" i]", "[class*=\"merchant\" i]"],
+      "iconAdd": "unlabeled",
+      "afterClick": "stay",
+      "errorPatterns": ["unable to add", "couldn.t add", "try again later", "something went wrong", "reached the (maximum|limit)"],
+      "cardHint": true,
+      "tips": "Pick the card in Amex's card switcher first. Offers can be added to only one card, so sync the card you'd rather use them on first."
+    },
+    {
+      "issuer": "chase",
+      "name": "Chase",
+      "domains": ["chase.com"],
+      "steps": [
+        { "id": "hub", "label": "Chase Offers", "url": "https://secure.chase.com/web/auth/dashboard#/dashboard/merchantOffers/offer-hub" }
+      ],
+      "pageStatus": [],
+      "addSelectors": [
+        "[data-cy=\"commerce-tile-button\"]"
+      ],
+      "iconAddSelectors": ["[type^=\"ico_add\" i]", "[data-testid*=\"add-icon\" i]"],
+      "addedSelectors": ["[type*=\"checkmark\" i]", "[data-testid*=\"checkmark\" i]", "[aria-label*=\"offer added\" i]"],
+      "tileSelectors": ["[data-cy=\"commerce-tile\"]", "[data-testid*=\"commerce-tile\" i]", "[role=\"button\"][tabindex=\"0\"]"],
+      "merchantSelectors": ["[data-cy*=\"merchant\" i]", "[class*=\"merchant\" i]", "h2", "h3", "h4"],
+      "loadMoreTexts": ["^see all offers$", "^view all offers$", "^all offers$"],
+      "iconAdd": "labeled",
+      "clickUnknownTiles": true,
+      "afterClick": "back",
+      "backSelectors": ["[variant=\"back\"] >>> #back-button", "[variant=\"back\"]", "button[aria-label=\"Back\" i]", "[data-testid*=\"back-button\" i]"],
+      "errorPatterns": ["unable to add", "try again later", "something went wrong"],
+      "cardHint": true,
+      "tips": "Chase opens each offer after adding it, and Perk Keeper goes back for you. Switch cards in Chase's account picker and sync again for each card."
+    },
+    {
+      "issuer": "citi",
+      "name": "Citi",
+      "domains": ["citi.com"],
+      "steps": [
+        { "id": "offers", "label": "Citi Merchant Offers", "url": "https://online.citi.com/US/ag/products-offers/merchantoffers" }
+      ],
+      "pageStatus": [],
+      "addSelectors": ["button[aria-label*=\"enroll\" i]", "button[aria-label*=\"add offer\" i]", "[data-testid*=\"enroll\" i]"],
+      "addTexts": ["^enroll$", "^enroll (now|in offer)$"],
+      "addedTexts": ["^enrolled$", "^you.re enrolled$"],
+      "iconAdd": "unlabeled",
+      "afterClick": "stay",
+      "errorPatterns": ["unable to enroll", "try again later", "something went wrong"],
+      "cardHint": true,
+      "tips": "If you land on the account summary, open Rewards & Offers → Merchant Offers."
+    },
+    {
+      "issuer": "bankOfAmerica",
+      "name": "Bank of America",
+      "domains": ["bankofamerica.com", "merchant-rewards.com"],
+      "steps": [
+        { "id": "login", "label": "Sign in, then open Deals", "url": "https://secure.bankofamerica.com/login/sign-in/signOnV2Screen.go" }
+      ],
+      "pageStatus": [],
+      "addSelectors": [".add-deal", "a.add-deal", "[data-testid*=\"add-deal\" i]", "[data-testid*=\"activate\" i]"],
+      "addTexts": ["^add( deal)?$", "^activate( deal)?$", "^add to card$"],
+      "iconAdd": "labeled",
+      "afterClick": "stay",
+      "errorPatterns": ["unable to", "try again later", "something went wrong"],
+      "cardHint": true,
+      "tips": "Use the full website. Bank of America moved offers to a new deals site in January 2026, and some deals need a second tap to stick."
+    },
+    {
+      "issuer": "wellsFargo",
+      "name": "Wells Fargo",
+      "domains": ["wellsfargo.com"],
+      "steps": [
+        { "id": "login", "label": "Sign in, then open My Wells Fargo Deals", "url": "https://connect.secure.wellsfargo.com/auth/login/present" }
+      ],
+      "pageStatus": [],
+      "addTexts": ["^activate( deal)?$", "^add( deal)?$"],
+      "addedTexts": ["^activated$", "^added$"],
+      "iconAdd": "labeled",
+      "afterClick": "stay",
+      "errorPatterns": ["unable to", "try again later", "something went wrong"],
+      "cardHint": true,
+      "tips": "Deals show on the account summary page in small batches. Scan again after each batch."
+    },
+    {
+      "issuer": "usBank",
+      "name": "U.S. Bank",
+      "domains": ["usbank.com"],
+      "steps": [
+        { "id": "login", "label": "Sign in, then Cash-back deals → View all deals", "url": "https://onlinebanking.usbank.com/auth/login/" }
+      ],
+      "pageStatus": [],
+      "addTexts": ["^activate( deal)?$"],
+      "addedTexts": ["^activated$"],
+      "iconAdd": "labeled",
+      "afterClick": "stay",
+      "errorPatterns": ["unable to", "try again later", "something went wrong"],
+      "cardHint": true,
+      "tips": "Cash-back deals are at the bottom of the dashboard. Open View all deals before scanning."
+    },
+    {
+      "issuer": "other",
+      "name": "Other bank",
+      "domains": [],
+      "steps": [],
+      "pageStatus": [],
+      "iconAdd": "labeled",
+      "afterClick": "stay",
+      "errorPatterns": ["unable to", "try again later", "something went wrong"],
+      "cardHint": true,
+      "tips": "Open your bank's offers page, then tap Scan. Perk Keeper looks for buttons like Add, Activate or Enroll."
+    }
+  ]
+}
